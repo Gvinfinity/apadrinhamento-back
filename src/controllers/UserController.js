@@ -57,17 +57,17 @@ async function add(request, response) {
 }
 
 async function read(request, response) {
-    const emailSchema = z.string().regex(/^[a-zA-Z][0-9]{6}@dac.unicamp.br$/)
+    const idSchema = z.string().uuid();
 
-    let email;
+    let id;
 
     try {
-        email = emailSchema.parse(request.params.email);
+        id = idSchema.parse(request.params.id);
     } catch (error) {
         return response.status(400).json(generateFormattedError(error));
     }
 
-    const user = await UserService.read(email);
+    const user = await UserService.read(id);
 
     if (user) {
         return response.json({ user });

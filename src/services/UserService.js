@@ -38,7 +38,6 @@ async function read(id) {
         where: {
             id,
         },
-        select: SELECTION_SET,
     });
 
     return user;
