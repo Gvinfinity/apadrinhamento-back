@@ -37,7 +37,13 @@ async function add(request, response) {
             expiresIn: "7d",
         });
 
-        return response.status(201).json({...user, access_token: token});
+        return response.set({ "Cache-Control": "no-store" })
+            .cookie("access-token", "Bearer " + token, {
+                httpOnly: true,
+                sameSite:
+                    process.env.NODE_ENV === "production" ? "none" : "strict",
+                secure: process.env.NODE_ENV === "production",
+            }).status(201).json({...user, access_token: token, token_type: "Bearer"});
     } catch (error) {
         if (error instanceof EntryExistsError) {
             return response
@@ -87,14 +93,12 @@ async function update(request, response) {
         picture: z.string().optional(),
     });
 
-    // const emailSchema = z.string().regex(/^[a-zA-Z][0-9]{6}@dac.unicamp.br$/);
     const idSchema = z.string().uuid();
 
     let data, id;
 
     try {
         data = await bodySchema.parseAsync(request.body);
-        // email = emailSchema.parse(request.params.email);
         id = idSchema.parse(request.params.id);
     } catch (error) {
         if (error instanceof z.ZodError) {
