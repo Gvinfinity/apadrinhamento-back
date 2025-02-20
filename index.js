@@ -19,7 +19,7 @@ const server = express();
 server.response.sendStatus = formattedSendStatus;
 
 server.use(cors({ credentials: true, origin: process.env.WEBAPP_HOST }));
-server.use(express.json());
+server.use(express.json({limit: 52428800}));
 server.use(cookieParser());
 
 server.use(oauthRoutes);
