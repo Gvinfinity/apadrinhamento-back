@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: db-apadrinhamento
+    environment:
+      POSTGRES_PASSWORD: senha
+    volumes:
+      - ./data/:/var/lib/postgresql/data 
+    ports:
+      - 5432:5432
+ 
+  adminer:
+    image: adminer
+    container_name: adminer-apadrinhamento
+    restart: always
+    ports:
+      - 8080:8080
