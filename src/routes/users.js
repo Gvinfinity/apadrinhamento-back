@@ -14,6 +14,8 @@ routes.post("/users", UserController.add, RequireAdminMiddleware);
 
 routes.get("/users/getToMatch", UserController.getToMatch, RequireAdminMiddleware);
 
+routes.get("/users/getPendingApproval", UserController.getPendingApproval, RequireAdminMiddleware);
+
 routes.get("/users/:id", UserController.read, RequireSelfMiddleware);
 
 routes.put("/users/:id", UserController.update, RequireSelfMiddleware);

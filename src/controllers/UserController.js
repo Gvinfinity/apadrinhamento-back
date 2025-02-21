@@ -174,4 +174,10 @@ async function getToMatch(_request, response) {
     return response.json(users);
 }
 
-export default { add, read, update, del, getToMatch };
+async function getPendingApproval(_request, response) {
+    const users = await UserService.getPendingApproval();
+
+    return response.json(users);
+}
+
+export default { add, read, update, del, getToMatch, getPendingApproval };

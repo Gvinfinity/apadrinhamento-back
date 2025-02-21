@@ -107,4 +107,21 @@ async function getToMatch() {
     return users;
 }
 
-export default { add, read, update, del, getAuthData, getToMatch };
+async function getPendingApproval() {
+    const users = await prisma.user.findMany({
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            picture: true,
+        },
+        where: {
+            approved: false,
+            role: 'veterane',
+        }
+    });
+
+    return users;
+}
+
+export default { add, read, update, del, getAuthData, getToMatch, getPendingApproval };
