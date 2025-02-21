@@ -12,9 +12,9 @@ routes.use("/users", AuthMiddleware);
 
 routes.post("/users", UserController.add, RequireAdminMiddleware);
 
-routes.get("/users/:id", UserController.read, RequireSelfMiddleware);
-
 routes.get("/users/getToMatch", UserController.getToMatch, RequireAdminMiddleware);
+
+routes.get("/users/:id", UserController.read, RequireSelfMiddleware);
 
 routes.put("/users/:id", UserController.update, RequireSelfMiddleware);
 
