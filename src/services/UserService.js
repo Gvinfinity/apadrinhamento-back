@@ -113,6 +113,7 @@ async function getPendingApproval() {
             id: true,
             name: true,
             email: true,
+            course: true,
             picture: true,
         },
         where: {
@@ -124,4 +125,17 @@ async function getPendingApproval() {
     return users;
 }
 
-export default { add, read, update, del, getAuthData, getToMatch, getPendingApproval };
+async function approve(id) {
+    const user = await prisma.user.update({
+        where: {
+            id,
+        },
+        data: {
+            approved: true,
+        },
+    });
+
+    return user;
+}
+
+export default { add, read, update, del, getAuthData, getToMatch, getPendingApproval, approve };

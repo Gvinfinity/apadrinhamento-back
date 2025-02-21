@@ -84,6 +84,7 @@ async function update(request, response) {
         pronouns: z.array(z.string()),
         ethnicity: z.array(z.string()),
         city: z.string().min(1, "Informe sua cidade").refine((city) => city != 'Cidade', { message: 'Informe sua cidade' }),
+        approved: z.boolean().optional(),
         lgbt: z.array(z.string()),
         parties: z.number().min(0).max(10),
         hobby: z.string().optional(),
@@ -180,4 +181,23 @@ async function getPendingApproval(_request, response) {
     return response.json(users);
 }
 
-export default { add, read, update, del, getToMatch, getPendingApproval };
+async function approve(request, response) {
+    const idSchema = z.string().uuid();
+
+    let id;
+
+    try {
+        id = idSchema.parse(request.params.id);
+    } catch (error) {
+        return response.status(400).json(generateFormattedError(error));
+    }
+
+    try {
+        const user = await UserService.approve(id);
+        return response.json(user);
+    } catch (error) {
+        return response.sendStatus(404);
+    }
+}
+
+export default { add, read, update, del, getToMatch, getPendingApproval, approve };
