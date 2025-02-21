@@ -85,14 +85,19 @@ async function getAuthData(email) {
 
 async function getToMatch() {
     const users = await prisma.user.findMany({
-        omit: {
-            password: true,
-            email: true,
-            status: true,
-            picture: true,
-            name: true,
-            createdAt: true,
-            updatedAt: true,
+        select: {
+            id: true,
+            course: true,
+            pronouns: true,
+            ethnicity: true,
+            lgbt: true,
+            city: true,
+            hobby: true,
+            role: true,
+            parties: true,
+            music: true,
+            games: true,
+            sports: true,
         },
         where: {
             status: true,
