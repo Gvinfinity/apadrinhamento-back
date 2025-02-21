@@ -8,28 +8,33 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid()) @db.Uuid
-  email     String   @unique
-  name      String?
-  password  String
-  status    Boolean  @default(false)
-  picture   String?
+  id       String  @id @default(uuid()) @db.Uuid
+  email    String  @unique
+  name     String?
+  password String
+  status   Boolean @default(false)
+  picture  String?
 
-  course   Course?
-  pronouns String[]
+  course    Course?
+  pronouns  String[]
   ethnicity String[]
-  city     String?
-  lgbt     String[]
-  parties  Int?
-  hobby    String?
-  music    String?
-  games    String?
-  sports   String?
+  city      String?
+  lgbt      String[]
+  parties   Int?
+  hobby     String?
+  music     String?
+  games     String?
+  sports    String?
+
+  approved  Boolean? @default(false)
+
+  godparentRelation GodparentRelation[] @relation("godparent")
+  godchildRelation  GodparentRelation[] @relation("godchild")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  role      Role?
+
+  role Role?
 
   @@map("users")
 }
@@ -43,4 +48,15 @@ enum Role {
   bixe
   veterane
   ADMIN
+}
+
+model GodparentRelation {
+  godparentId String @db.Uuid
+  godchildId  String @db.Uuid
+
+  godparent User @relation("godparent", fields: [godparentId], references: [id])
+  godchild  User @relation("godchild", fields: [godchildId], references: [id])
+
+  @@id([godparentId, godchildId]) // Composite Primary Key
+  @@map("godparent_relations") // Naming the join table explicitly
 }
