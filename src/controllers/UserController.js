@@ -168,4 +168,10 @@ async function del(request, response) {
     }
 }
 
-export default { add, read, update, del };
+async function getToMatch(_request, response) {
+    const users = await UserService.getToMatch();
+
+    return response.json(users);
+}
+
+export default { add, read, update, del, getToMatch };

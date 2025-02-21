@@ -14,6 +14,8 @@ routes.post("/users", UserController.add, RequireAdminMiddleware);
 
 routes.get("/users/:id", UserController.read, RequireSelfMiddleware);
 
+routes.get("/users/getToMatch", UserController.getToMatch, RequireAdminMiddleware);
+
 routes.put("/users/:id", UserController.update, RequireSelfMiddleware);
 
 routes.delete("/users/:id", UserController.del, RequireAdminMiddleware);

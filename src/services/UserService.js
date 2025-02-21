@@ -83,4 +83,23 @@ async function getAuthData(email) {
     return user;
 }
 
-export default { add, read, update, del, getAuthData };
+async function getToMatch() {
+    const users = await prisma.user.findMany({
+        omit: {
+            password: true,
+            email: true,
+            status: true,
+            picture: true,
+            name: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+        where: {
+            status: true,
+        }
+    });
+
+    return users;
+}
+
+export default { add, read, update, del, getAuthData, getToMatch };
