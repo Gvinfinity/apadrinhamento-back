@@ -35,6 +35,26 @@ async function add(data) {
 
 async function read(id) {
     const user = await prisma.user.findUnique({
+        include: {
+            godchildRelation: {
+                include: {
+                    godparent: {
+                        select: {
+                            name: true,
+                            course: true,
+                            email: true,
+                            picture: true,
+                            hobby: true,
+                            music: true,
+                            games: true,
+                            sports: true,
+                            parties: true,
+                            city: true,
+                        }
+                    },
+                }
+            }
+        },
         where: {
             id,
         },
