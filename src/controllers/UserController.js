@@ -181,6 +181,12 @@ async function getPendingApproval(_request, response) {
     return response.json(users);
 }
 
+async function getStats(_request, response) {
+    const stats = await UserService.getStats();
+
+    return response.json(stats);
+}
+
 async function approve(request, response) {
     const idSchema = z.string().uuid();
 
@@ -200,4 +206,4 @@ async function approve(request, response) {
     }
 }
 
-export default { add, read, update, del, getToMatch, getPendingApproval, approve };
+export default { add, read, update, del, getToMatch, getPendingApproval, approve, getStats };

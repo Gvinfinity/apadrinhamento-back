@@ -66,6 +66,31 @@ async function del(id) {
     return user;
 }
 
+async function getStats() {
+    const vets = await prisma.user.count({
+        where: {
+            role: 'veterane',
+            status: true,
+        },
+    });
+
+    const bixes = await prisma.user.count({
+        where: {
+            role: 'bixe',
+            status: true,
+        },
+    });
+
+    const approved = await prisma.user.count({
+        where: {
+            approved: true,
+            role: 'veterane',
+        },
+    });
+
+    return { vets, bixes, approved };
+}
+
 async function getAuthData(email) {
     const user = await prisma.user.findUnique({
         where: {
@@ -138,4 +163,4 @@ async function approve(id) {
     return user;
 }
 
-export default { add, read, update, del, getAuthData, getToMatch, getPendingApproval, approve };
+export default { add, read, update, del, getAuthData, getToMatch, getPendingApproval, approve, getStats };

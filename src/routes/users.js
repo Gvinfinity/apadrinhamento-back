@@ -16,6 +16,8 @@ routes.get("/users/getToMatch", UserController.getToMatch, RequireAdminMiddlewar
 
 routes.get("/users/getPendingApproval", UserController.getPendingApproval, RequireAdminMiddleware);
 
+routes.get("/users/stats", UserController.getStats, RequireAdminMiddleware);
+
 routes.put("/users/:id/approve", UserController.approve, RequireAdminMiddleware);
 
 routes.get("/users/:id", UserController.read, RequireSelfMiddleware);
