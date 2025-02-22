@@ -132,8 +132,35 @@ async function getToMatch() {
         },
         where: {
             status: true,
+            role: { in: ['veterane', 'bixe'] },
         }
     });
+
+    const adminUsers = await prisma.user.findMany({
+        select: {
+            id: true,
+            course: true,
+            pronouns: true,
+            ethnicity: true,
+            lgbt: true,
+            city: true,
+            hobby: true,
+            role: true,
+            parties: true,
+            music: true,
+            games: true,
+            sports: true,
+        },
+        where: {
+            status: true,
+            role: 'ADMIN',
+        }
+    });
+
+    for (const user of adminUsers) {
+        user.role = 'veterane';
+        users.push(user);
+    }
 
     return users;
 }
