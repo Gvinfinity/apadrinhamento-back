@@ -81,6 +81,12 @@ async function getStats() {
         },
     });
 
+    const pending = await prisma.user.count({
+        where: {
+            status: false,
+        },
+    });
+
     const approved = await prisma.user.count({
         where: {
             approved: true,
@@ -88,7 +94,7 @@ async function getStats() {
         },
     });
 
-    return { vets, bixes, approved };
+    return { vets, bixes, approved, pending };
 }
 
 async function getAuthData(email) {
