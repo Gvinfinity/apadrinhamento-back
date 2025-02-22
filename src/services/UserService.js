@@ -169,4 +169,23 @@ async function approve(id) {
     return user;
 }
 
-export default { add, read, update, del, getAuthData, getToMatch, getPendingApproval, approve, getStats };
+async function addGodparentRelations(data) {
+    const toAdd = [];
+    
+    for (const godchild of Object.keys(data)) {
+        for (const godparent of data[godchild]) {
+            toAdd.push({
+                godchildId: godchild,
+                godparentId: godparent,
+            });
+        }
+    }
+
+    const relations = await prisma.godparentRelation.createMany({
+        data: toAdd,
+    });
+
+    return relations;
+}
+
+export default { add, read, update, del, getAuthData, getToMatch, getPendingApproval, approve, getStats, addGodparentRelations };

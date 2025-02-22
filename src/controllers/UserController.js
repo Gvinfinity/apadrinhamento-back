@@ -9,6 +9,7 @@ import UserService from "#services/UserService.js";
 import { EntryExistsError } from "#errors/EntryExists.js";
 
 import generateFormattedError from "#utils/generateFormattedError.js";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
@@ -206,4 +207,27 @@ async function approve(request, response) {
     }
 }
 
-export default { add, read, update, del, getToMatch, getPendingApproval, approve, getStats };
+async function addGodparentRelations(request, response) {
+    const bodySchema = z.record(z.array(z.string().uuid()));
+
+    let data;
+
+    try {
+        data = await bodySchema.parseAsync(request.body);
+    } catch (error) {
+        return response.status(400).json(generateFormattedError(error));
+    }
+
+    try {
+        const relations = await UserService.addGodparentRelations(data);
+        return response.json(relations);
+    } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+            return response.status(400).json({ error: { message: "Duplicate entry", code: "duplicate_entry" } });
+        }
+        console.error(error);
+        return response.sendStatus(500);
+    }
+}
+
+export default { add, read, update, del, getToMatch, getPendingApproval, approve, getStats, addGodparentRelations };

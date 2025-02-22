@@ -12,6 +12,8 @@ routes.use("/users", AuthMiddleware);
 
 routes.post("/users", UserController.add, RequireAdminMiddleware);
 
+routes.post("/users/addGodparentRelations", UserController.addGodparentRelations, RequireAdminMiddleware);
+
 routes.get("/users/getToMatch", UserController.getToMatch, RequireAdminMiddleware);
 
 routes.get("/users/getPendingApproval", UserController.getPendingApproval, RequireAdminMiddleware);
