@@ -151,7 +151,7 @@ async function getToMatch() {
             sports: true,
         },
         where: {
-            status: true,
+            approved: true,
             role: { in: ['veterane', 'bixe'] },
         }
     });
