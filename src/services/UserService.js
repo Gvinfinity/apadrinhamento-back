@@ -53,6 +53,24 @@ async function read(id) {
                         }
                     },
                 }
+            },
+            godparentRelation: {
+                include: {
+                    godchild: {
+                        select: {
+                            name: true,
+                            course: true,
+                            email: true,
+                            picture: true,
+                            hobby: true,
+                            music: true,
+                            games: true,
+                            sports: true,
+                            parties: true,
+                            city: true,
+                        }
+                    },
+                }
             }
         },
         where: {
@@ -151,8 +169,16 @@ async function getToMatch() {
             sports: true,
         },
         where: {
-            approved: true,
-            role: { in: ['veterane', 'bixe'] },
+            OR: [
+                {
+                    role: 'veterane',
+                    approved: true,
+                },
+                {
+                    role: 'bixe',
+                    status: true,
+                }
+            ]
         }
     });
 
