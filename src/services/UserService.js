@@ -153,57 +153,11 @@ async function getAuthData(email) {
 }
 
 async function getToMatch() {
-    const users = await prisma.user.findMany({
-        select: {
-            id: true,
-            course: true,
-            pronouns: true,
-            ethnicity: true,
-            lgbt: true,
-            city: true,
-            hobby: true,
-            role: true,
-            parties: true,
-            music: true,
-            games: true,
-            sports: true,
-        },
-        where: {
-            OR: [
-                {
-                    role: 'veterane',
-                    approved: true,
-                },
-                {
-                    role: 'bixe',
-                    status: true,
-                }
-            ]
-        }
-    });
+    const users = await prisma.$queryRaw`SELECT id, course, pronouns, ethnicity, lgbt, city, hobby, role, parties, music, games, sports FROM USERS WHERE ("role" = 'veterane' AND "approved" = true AND (SELECT COUNT(*) FROM "godparent_relations" WHERE "godparentId" = "users"."id") < 2) OR ("role" = 'bixe' AND "status" = true AND (SELECT COUNT(*) FROM "godparent_relations" WHERE "godchildId" = "users"."id") = 0)`;
 
-    const adminUsers = await prisma.user.findMany({
-        select: {
-            id: true,
-            course: true,
-            pronouns: true,
-            ethnicity: true,
-            lgbt: true,
-            city: true,
-            hobby: true,
-            role: true,
-            parties: true,
-            music: true,
-            games: true,
-            sports: true,
-        },
-        where: {
-            status: true,
-            role: 'ADMIN',
-        }
-    });
+    const admins = await prisma.$queryRaw`SELECT id, course, pronouns, ethnicity, lgbt, city, hobby, role, parties, music, games, sports FROM USERS WHERE ("role" = 'ADMIN' AND "status" = true AND (SELECT COUNT(*) FROM "godparent_relations" WHERE "godparentId" = "users"."id") < 2)`;
 
-    for (const user of adminUsers) {
+    for (const user of admins) {
         user.role = 'veterane';
         users.push(user);
     }
